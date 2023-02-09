@@ -1,0 +1,69 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <meta charset="UTF-8">
+    <title>The Ultimate Ebook Creator</title>
+    <link rel="stylesheet" type="text/css" href="style.css">
+  </head>
+  <body>
+    <h1>The Ultimate Ebook Creator</h1>
+    <form>
+      <div>
+        <label for="bookTitle">Book Title:</label>
+        <input type="text" id="bookTitle" name="bookTitle" required>
+      </div>
+      <div>
+        <label for="authorName">Author Name:</label>
+        <input type="text" id="authorName" name="authorName" required>
+      </div>
+      <div>
+        <label for="bookContent">Book Content:</label>
+        <textarea id="bookContent" name="bookContent" required></textarea>
+      </div>
+      <div>
+        <label for="bookFormat">Book Format:</label>
+        <select id="bookFormat" name="bookFormat">
+          <option value="txt">Text</option>
+          <option value="pdf">PDF</option>
+          <option value="epub">ePub</option>
+        </select>
+      </div>
+      <div>
+        <label for="fontStyle">Font Style:</label>
+        <select id="fontStyle" name="fontStyle">
+          <option value="arial">Arial</option>
+          <option value="timesNewRoman">Times New Roman</option>
+          <option value="verdana">Verdana</option>
+        </select>
+      </div>
+      <div>
+        <label for="sectionCount">Number of Sections:</label>
+        <input type="number" id="sectionCount" name="sectionCount">
+      </div>
+      <div>
+        <label for="mediaUpload">Media Upload:</label>
+        <input type="file" id="mediaUpload" name="mediaUpload">
+      </div>
+      <div>
+        <label for="coverImage">Cover Image:</label>
+        <input type="file" id="coverImage" name="coverImage">
+      </div>
+      <div>
+        <input type="checkbox" id="pageNumbers" name="pageNumbers">
+        <label for="pageNumbers">Add Page Numbers</label>
+      </div>
+      <div>
+        <input type="checkbox" id="passwordProtection" name="passwordProtection">
+        <label for="passwordProtection">Enable Password Protection</label>
+      </div>
+      <div>
+        <input type="checkbox" id="sendToKindle" name="sendToKindle">
+        <label for="sendToKindle">Send to Kindle</label>
+      </div>
+      <div>
+        <label for="email">Email:</label>
+        <input type="email" id="email" name="email" required>
+      </div>
+      <div>
+        <input type="checkbox" id="shareOnFacebook" name="shareOnFacebook">
+        <label for="shareOnFacebook">Share on Facebook</label>

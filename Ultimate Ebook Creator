@@ -1,0 +1,81 @@
+import ebooklib
+import io
+from uuid import uuid4
+from typing import Optional, List
+from PIL import Image
+
+class Block:
+    def __init__(self, title: str, content: str, media_type: Optional[str] = 'text/html'):
+        self.title = title
+        self.content = content
+        self.media_type = media_type
+        self.uuid = str(uuid4())
+
+    def render(self):
+        return self.content
+
+class ImageBlock(Block):
+    def __init__(self, title: str, content: Image.Image, media_type: Optional[str] = 'image/jpeg'):
+        self.image = content
+        self.content = io.BytesIO()
+        self.image.save(self.content, format="JPEG")
+        self.content.seek(0)
+        super().__init__(title, self.content.read(), media_type)
+        self.file_name = f'{self.uuid}.{self.media_type.split("/")[1]}'
+
+class CoverPage(ImageBlock):
+    def __init__(self, title: str, content: Image.Image, media_type: Optional[str] = 'image/jpeg'):
+        super().__init__(title, content, media_type)
+        self.file_name = 'cover.jpeg'
+
+class Stylesheet(ebooklib.epub.EpubItem):
+    def __init__(self, content: str):
+        super().__init__(
+            uid=str(uuid4()),
+            file_name='style.css',
+            media_type='text/css',
+            content=content
+        )
+
+class EbookEditor:
+    def __init__(self):
+        self.book = ebooklib.epub.EpubBook()
+        self.book.set_identifier(str(uuid4()))
+        self.book.set_title('')
+        self.book.set_language('en')
+        self.book.add_author('')
+
+    def set_title(self, title: str):
+        self.book.set_title(title)
+
+    def set_language(self, language: str):
+        self.book.set_language(language)
+
+    def add_author(self, author: str):
+        self.book.add_author(author)
+
+    def add_metadata(self, metadata: ebooklib.epub.EpubMetadata):
+        self.book.add_metadata(metadata)
+
+    def set_cover_page(self, cover_page: CoverPage):
+        self.book.set_cover(cover_page.file_name, cover_page.content.getvalue())
+        self.book.add_item(cover_page)
+
+    def add_block(self, block: Block):
+        content_file_name = f'{block.uuid}.{block.media_type.split("/")[1]}'
+        content_file = ebooklib.epub.EpubItem(
+            uid=block.uuid,
+            file_name=content_file_name,
+            media_type=block.media_type,
+            content=block.content
+        )
+        self.book.add_item(content_file)
+        self.book.spine.append(content_file)
+        self.book.toc.append(ebooklib.epub.Link(content_file_name, block.title, content_file_name))
+
+    def set_stylesheet(self, stylesheet: Stylesheet):
+        self.book.add_item(stylesheet)
+        self.book.spine.insert(0, stylesheet)
+
+    def save(self, file_path: str):
+        ebooklib.epub.write_epub(file_path, self.book, {})
